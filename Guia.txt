@@ -1,0 +1,24 @@
+Pokédex
+
+
+yarn create react-app letmeask --template typescript
+yarn add firebase
+yarn add node-sass@^5.0.0
+yarn add react-router-dom
+yarn add @types/react-router-dom -D
+yarn add classnames
+yarn add axios
+
+
+###################################################################
+https://medium.com/@sergio13prez/fetching-them-all-poke-api-62ca580981a2
+https://www.pokemon.com/br/pokedex/
+
+Listar todos os Pokémons:
+https://pokeapi.co/api/v2/pokemon?limit=100
+
+Listar os detalhes de cada Pokémon (Usar o ID):
+https://pokeapi.co/api/v2/pokemon/1
+
+Imagem de cada Pokémon:
+https://pokeres.bastionbot.org/images/pokemon/1.png
