@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
+import { Card } from '../../components/Card';
 //import { useHistory } from 'react-router-dom';
 //import { Tracing } from 'trace_events';
 
@@ -23,8 +24,8 @@ type PokemonsType =  {
 
 
 type PaginationType = {
-    next?: string,
-    previous?: string;
+    next: string,
+    previous: string;
   }
 
 
@@ -32,19 +33,14 @@ export function Home() {
 
     const [pokemons, setPokemons] = useState<PokemonsType[]>([]);
     const [erro, setErro]         = useState<boolean>(false);
-    const [url, setURL]           = useState<string>('?limit=100');
-    //const [nextURL, setNextURL]   = useState<string>('');
-    
-    const [nextURL, setNextURL]   = useState<PaginationType>({next: '', previous: ''});
-
-    //let vUrl = '?limit=100';
+    const [url, setURL]           = useState<string>('https://pokeapi.co/api/v2/pokemon?offset=0&limit=10');
+    const [pagination, setPagination]   = useState<PaginationType>({next: '', previous: ''});
     
     let vUrlImagem: string = 'https://pokeres.bastionbot.org/images/pokemon/';
 
-
-    function handleNexPage() {
-        setURL('?limit=2');
-    }
+    function handlePagination(urlPagination: string) {
+        setURL(urlPagination);
+    };
 
     useEffect(() =>  {
        
@@ -59,11 +55,10 @@ export function Home() {
         async function fetchData() {
             await api.get(url)
                      .then(response => {
-                                        
                                             vStatusRetorno = JSON.stringify(response.status, null, 2);
+                                            //console.log(response.data);
                                             
                                             if (vStatusRetorno === '200') {
-
                                                 const respostaAPI: Pokemons = response.data.results ?? {};
                                                 const parseResposta = Object.entries(respostaAPI).map( ([key, value]) => {
                                                     return {
@@ -72,16 +67,12 @@ export function Home() {
                                                         id: LimpaCaracteres(value.url)
                                                     }
                                                 });
-                                                
-                                                //console.log(response.data);
 
                                                 //Alimentar o State com a lista do Pokémons
                                                 setPokemons(parseResposta); 
                                                 
                                                 //Alimentar o State com a URL para a próxima página
-                                                //setNextURL(response.data.next);
-
-                                                setNextURL({next: response.data.next, previous: response.data.previous})
+                                                setPagination({next: response.data.next, previous: response.data.previous})
 
                                             };
 
@@ -90,33 +81,32 @@ export function Home() {
                      .catch(error => {
                         setErro(false);
                      });
-        }
+        };
 
         fetchData();
         
         //console.log(pokemons);
-        console.log(nextURL);
+        //console.log(pagination);
+        //console.log(pagination.next);
 
       },[url, erro])
-
-
 
     return (
         <>
             <div>
-                <div>Pokédex</div>
-
                 {pokemons.map(dados => 
                     (
-                        <div key={dados.id}>
-                            {`${dados.name} - ${dados.url}`}<br />
-                            {/*<img src={`${vUrlImagem}${dados.id}.png`} alt={dados.name} />*/}
-                        </div>
+                        <Card 
+                            key = {dados.id}
+                            imagem={`${vUrlImagem}${dados.id}.png`}
+                            name = {dados.name}
+                        />
                     )
                 )}
             </div>
 
-            <button type='button' onClick={handleNexPage}>Próxima</button>
+            {pagination.previous && <button type='button' onClick={() => handlePagination(pagination.previous) }>Anterior</button>}
+            {pagination.next && <button type='button' onClick={() => handlePagination(pagination.next) }>Próxima</button>}
 
         </>
     )
