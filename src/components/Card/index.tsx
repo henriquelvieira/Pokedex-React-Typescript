@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import './styles.scss';
@@ -15,7 +14,7 @@ export function Card({
   }: CardProps) {
     return (
            <div className="card">
-              <Link to={name}>
+              <Link to={`/pokemon/${name}`}>
                 <img src={imagem} alt={name} />
                 <div className="container">
                   <h4><b>{name}</b></h4>
