@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Card } from '../../components/Card';
-//import { useHistory } from 'react-router-dom';
-//import { Tracing } from 'trace_events';
 
 import { api } from '../../services/api';
 
